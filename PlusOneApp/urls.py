@@ -3,6 +3,6 @@ from django.urls import include
 from django.urls import path
 from PlusOneApp import views
 
-urlpatters = [
+urlpatterns = [
     path('', views.index, name="index")
 ]
