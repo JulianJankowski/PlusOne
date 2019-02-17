@@ -3,10 +3,12 @@ from django.urls import reverse
 from django.contrib import admin
 
 class Account(models.Model):
-    username = models.TextField()
-    firstName = models.TextField()
-    lastName = models.TextField()
-    age = models.IntegerField()
+    username = models.CharField(max_length=200)
+    firstName = models.CharField(max_length=200)
+    lastName = models.CharField(max_length=200)
+    DOB = models.DateField(auto_now=False, auto_now_add=False, null=True)
+    email = models.CharField(max_length=200, null=True)
+    profilePic = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None, null=True)
 
     def __str__(self):
         return self.username
@@ -16,7 +18,6 @@ class Account(models.Model):
 
 class Activity(models.Model):
     name = models.CharField(max_length=200)
-    location = models.CharField(max_length=200)
     description = models.TextField(null=True)
 
     def __str__(self):
@@ -26,10 +27,16 @@ class Activity(models.Model):
         return reverse('activity-detail', args=[str(self.id)])
 
 class Group(models.Model):
+    #Title
     title = models.CharField(max_length=200)
     
-    #Creator of the ad
-    #host = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True)
+    #Time
+    timeCreated = models.DateTimeField(auto_now_add=True, null=True)
+    timeOccuring = models.DateTimeField(null=True)
+    reccuring = models.BooleanField(default=False) 
+
+    #Location
+    location = models.CharField(max_length=500, null=True)
 
     #Members
     members = models.ManyToManyField(Account, help_text='Select members of this group')
@@ -37,11 +44,21 @@ class Group(models.Model):
         return ', '.join(member.firstName for member in self.members.all()[:3])
     displayMembers.short_description = 'Members'
 
+    #Description
     description = models.TextField(help_text='Enter a description of for group')
-    currentCount = models.IntegerField(default=1)
+    
+    #Current Count
+    def curMembers(self):
+        return self.members.all().count()
+    curMembers.short_description = "Number of members"
+
+    #Ideal Count
     idealCount = models.IntegerField(default=1)
 
+    #Activities
     activities = models.ManyToManyField(Activity, help_text='Select the activities for this group')
+
+    groupImage = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None, null=True)
     def displayActivities(self):
         return ', '.join(act.name for act in self.activities.all()[:3])
     displayActivities.short_description = 'Activites'

@@ -1,1 +1,1 @@
-DJango made webapp
+Django made webapp
