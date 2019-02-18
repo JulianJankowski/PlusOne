@@ -26,17 +26,12 @@ class Activity(models.Model):
     def get_absolute_url(self):
         return reverse('activity-detail', args=[str(self.id)])
 
+#class Image(models.Model):
+#    image = models.ImageField(upload_to="user_images", height_field=None, width_field=None, max_length=None)
+
 class Group(models.Model):
     #Title
     title = models.CharField(max_length=200)
-    
-    #Time
-    timeCreated = models.DateTimeField(auto_now_add=True, null=True)
-    timeOccuring = models.DateTimeField(null=True)
-    reccuring = models.BooleanField(default=False) 
-
-    #Location
-    location = models.CharField(max_length=500, null=True)
 
     #Members
     members = models.ManyToManyField(Account, help_text='Select members of this group')
@@ -58,7 +53,7 @@ class Group(models.Model):
     #Activities
     activities = models.ManyToManyField(Activity, help_text='Select the activities for this group')
 
-    groupImage = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None, null=True)
+    profilePic = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None, null=True)
     def displayActivities(self):
         return ', '.join(act.name for act in self.activities.all()[:3])
     displayActivities.short_description = 'Activites'
@@ -68,3 +63,38 @@ class Group(models.Model):
 
     def get_absolute_url(self):
         return reverse('group-detail', args=[str(self.id)])
+
+class Event(models.Model):
+    title = models.CharField(max_length=50)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    description = models.TextField()
+    
+    timeCreated = models.DateTimeField(auto_now_add=True, null=True)
+    timeOccuring = models.DateTimeField(null=True)
+    
+    reccuring = models.BooleanField(default=False) 
+    
+    RECCHOICES = (
+        ("D", "Daily"),
+        ("BW", "Bi-Weekly"),
+        ("W", "Weekly"),
+        ("F", "Fortnightly"),
+        ("M", "Monthly"),
+        ("Q", "Quaterly"),
+        ("BY", "Bi-Yearly"),
+        ("Y", "Yearly"),
+    )
+    howOften = models.CharField(max_length=11, choices=RECCHOICES, blank=True, null=True)
+
+    location = models.CharField(max_length=500, null=True)
+
+    activities = models.ManyToManyField(Activity, help_text='Select the activities for this group')
+    def displayActivities(self):
+        return ', '.join(act.name for act in self.activities.all()[:3])
+    displayActivities.short_description = 'Activites'
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('event-detail', args=[str(self.id)])

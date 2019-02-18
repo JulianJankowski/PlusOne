@@ -11,4 +11,8 @@ class ActivityAdmin(admin.ModelAdmin):
 
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
-    list_display = ('title', 'timeCreated', 'location', 'timeOccuring', 'reccuring', 'displayMembers', 'curMembers', 'idealCount', 'displayActivities', 'description')
+    list_display = ('title', 'displayMembers', 'curMembers', 'idealCount', 'displayActivities', 'description')
+
+@admin.register(Event)
+class EventAdmin(admin.ModelAdmin):
+    list_display = ('title', 'group', 'timeCreated', 'timeOccuring', 'reccuring', 'howOften', 'location', 'displayActivities')
