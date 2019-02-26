@@ -9,6 +9,7 @@ class Account(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     DOB = models.DateField(auto_now=False, auto_now_add=False, null=True)
     profilePic = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None, blank=True, default="static/images/default_profile_icon.jpg")
+    emailConfirmed = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username
@@ -49,7 +50,7 @@ class Group(models.Model):
     #Members
     members = models.ManyToManyField(Account, help_text='Select members of this group')
     def displayMembers(self):
-        return ', '.join(member.firstName for member in self.members.all()[:3])
+        return ', '.join(member.getUsername() for member in self.members.all()[:3])
     displayMembers.short_description = 'Members'
 
     #Description
@@ -66,7 +67,7 @@ class Group(models.Model):
     #Activities
     activities = models.ManyToManyField(Activity, help_text='Select the activities for this group')
 
-    profilePic = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None, null=True)
+    profilePic = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None, blank=True, default="static/images/default_group_image.png")
     def displayActivities(self):
         return ', '.join(act.name for act in self.activities.all()[:3])
     displayActivities.short_description = 'Activites'
@@ -75,7 +76,7 @@ class Group(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('group-detail', args=[str(self.id)])
+        return reverse('group-profile', args=[str(self.id)])
 
 class Event(models.Model):
     title = models.CharField(max_length=50)
