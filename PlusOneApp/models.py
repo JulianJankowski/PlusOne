@@ -2,10 +2,16 @@ from django.db import models
 from django.urls import reverse
 from django.contrib import admin
 from django.contrib.auth.models import User
+<<<<<<< HEAD
+=======
+from django.dispatch import receiver
+from django.db.models.signals import post_save
+>>>>>>> registration
 
 class Account(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     DOB = models.DateField(auto_now=False, auto_now_add=False, null=True)
+<<<<<<< HEAD
     profilePic = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None, blank=True, default="static/images/default_profile_icon.jpg")
 
     def __str__(self):
@@ -14,10 +20,25 @@ class Account(models.Model):
     def getUsername(self):
         return self.user.username
     getUsername.short_description = "User"
+=======
+    profilePic = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None, null=True)
+
+    def __str__(self):
+        return self.user.username
+>>>>>>> registration
 
     def get_absolute_url(self):
         return reverse('account-detail', args=[str(self.id)])
 
+@receiver(post_save, sender=User)
+def update_user_account(sender, instance, created, **kwargs):
+    if created:
+        Account.objects.create(user=instance)
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    instance.account.save()
+        
 class Activity(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(null=True)

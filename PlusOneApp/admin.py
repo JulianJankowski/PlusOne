@@ -3,7 +3,11 @@ from PlusOneApp.models import *
 
 @admin.register(Account)
 class AccountAdmin(admin.ModelAdmin):
+<<<<<<< HEAD
     list_display = ('getUsername', 'DOB', 'profilePic')
+=======
+    list_display = ['DOB']
+>>>>>>> registration
 
 @admin.register(Activity)
 class ActivityAdmin(admin.ModelAdmin):
