@@ -1,17 +1,19 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib import admin
+from django.contrib.auth.models import User
 
 class Account(models.Model):
-    username = models.CharField(max_length=200)
-    firstName = models.CharField(max_length=200)
-    lastName = models.CharField(max_length=200)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     DOB = models.DateField(auto_now=False, auto_now_add=False, null=True)
-    email = models.CharField(max_length=200, null=True)
-    profilePic = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None, null=True)
+    profilePic = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None, blank=True, default="static/images/default_profile_icon.jpg")
 
     def __str__(self):
-        return self.username
+        return self.user.username
+
+    def getUsername(self):
+        return self.user.username
+    getUsername.short_description = "User"
 
     def get_absolute_url(self):
         return reverse('account-detail', args=[str(self.id)])

@@ -3,7 +3,7 @@ from PlusOneApp.models import *
 
 @admin.register(Account)
 class AccountAdmin(admin.ModelAdmin):
-    list_display = ('username', 'firstName', 'lastName', 'DOB', 'email')
+    list_display = ('getUsername', 'DOB', 'profilePic')
 
 @admin.register(Activity)
 class ActivityAdmin(admin.ModelAdmin):
