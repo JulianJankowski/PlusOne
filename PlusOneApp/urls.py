@@ -6,7 +6,10 @@ from PlusOneApp import views
 urlpatterns = [
     path('', views.index, name="index"),
     path('groups/', views.GroupListView.as_view(), name="groups"),
-    path('book/<int:pk>', views.GroupProfile.as_view(), name="group-profile"),
+    path('groups/<str:pk>', views.GroupProfile.as_view(), name="group-profile"),
+    path('activites/', views.ActivityListView.as_view(), name="activities"),
+    path('activites/<str:pk>', views.ActivityDetail.as_view(), name="activity-detail"),
     path('account/', include('django.contrib.auth.urls')),
+    path('user/<int:pk>', views.UserProfile.as_view(), name="account-profile"),
     path('register/', views.register, name="register"),
 ]

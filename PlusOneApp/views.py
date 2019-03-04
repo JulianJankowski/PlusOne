@@ -41,6 +41,18 @@ class GroupListView(generic.ListView):
 class GroupProfile(generic.DetailView):
     model = Group
 
+class ActivityListView(generic.ListView):
+    model = Activity
+    context_object_name = 'activity_list'
+    queryset = Activity.objects.all()
+    template_name = 'activities/mylist.html'
+
+class ActivityDetail(generic.DetailView):
+    model = Activity
+
+class UserProfile(generic.DetailView):
+    model = Account
+
 def index(request):
     numGroups = Group.objects.all().count()
     numAccounts = Account.objects.all().count()

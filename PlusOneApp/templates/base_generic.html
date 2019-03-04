@@ -15,10 +15,10 @@
       <div class="col-sm-2">
       {% block sidebar %}
         <ul class="sidebar-nav">
-          <li><a href="{% url 'index' %}">Home</a></li>
-          <li><a href="">All Activites</a></li>
-          <li><a href="{% url 'groups' %}">All Groups</a></li>
           {% if user.is_authenticated %}
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'activities' %}">All Activites</a></li>
+            <li><a href="{% url 'groups' %}">All Groups</a></li>
             <li>User: {{ user.get_username }}</li>
             <li><a href="{% url 'logout'%}?next={{request.path}}">Logout</a></li>   
           {% else %}

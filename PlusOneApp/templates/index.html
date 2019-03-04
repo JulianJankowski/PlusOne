@@ -3,6 +3,7 @@
 {% block content %}
   <h1>PlusOne Home</h1>
   <p>Welcome to PlusOne, a website developed by <em>Big Boi Development</em>!</p>
+  {% if user.is_authenticated %}
   <h2>Dynamic content</h2>
   <p>The library has the following record counts:</p>
   <ul>
@@ -10,4 +11,6 @@
     <li><strong>Accounts:</strong> {{ Accounts }}</li>
     <li><strong>Groups:</strong> {{ Groups }}</li>
   </ul>
+  {% else %}
+  {% endif %}
 {% endblock %}

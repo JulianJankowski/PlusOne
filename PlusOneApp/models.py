@@ -31,21 +31,21 @@ def save_user_profile(sender, instance, **kwargs):
     instance.account.save()
         
 class Activity(models.Model):
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200, primary_key=True)
     description = models.TextField(null=True)
 
     def __str__(self):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('activity-detail', args=[str(self.id)])
+        return reverse('activity-detail', args=[str(self.name)])
 
 #class Image(models.Model):
 #    image = models.ImageField(upload_to="user_images", height_field=None, width_field=None, max_length=None)
 
 class Group(models.Model):
     #Title
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=200, primary_key=True)
 
     #Members
     members = models.ManyToManyField(Account, help_text='Select members of this group')
@@ -76,7 +76,7 @@ class Group(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('group-profile', args=[str(self.id)])
+        return reverse('group-profile', args=[str(self.title)])
 
 class Event(models.Model):
     title = models.CharField(max_length=50)

@@ -1,0 +1,16 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>Activity List</h1>
+  {% if activity_list %}
+  <ul>
+    {% for activity in activity_list %}
+      <li>
+        <a href="{{ activity.get_absolute_url }}">{{ activity.name }}</a> ({{activity.description}})
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There are no activities in the database.</p>
+  {% endif %}       
+{% endblock %}
