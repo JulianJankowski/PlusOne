@@ -10,6 +10,7 @@ urlpatterns = [
     path('activites/', views.ActivityListView.as_view(), name="activities"),
     path('activites/<str:pk>', views.ActivityDetail.as_view(), name="activity-detail"),
     path('account/', include('django.contrib.auth.urls')),
-    path('user/<int:pk>', views.UserProfile.as_view(), name="account-profile"),
+    path('user/<str:pk>', views.UserProfile.as_view(), name="account-profile"),
     path('register/', views.register, name="register"),
+    path('create_group/', views.create_group, name="create_group"),
 ]

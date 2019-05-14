@@ -32,6 +32,27 @@ def register(request):
     
     return render(request, 'register.html', {'form': form})
 
+def create_group(request):
+    if(request.user.is_authenticated == False):
+        return redirect("index")
+    if(request.method == "POST"):
+        form = CreateGroupForm(request.POST)
+        if(form.is_valid()):
+            group = form.save()
+            group.refresh_from_db()
+            group.title = form.cleaned_data.get('title')
+            group.members.set(form.cleaned_data.get('members'))
+            group.description = form.cleaned_data.get('description')
+            group.idealNum = form.cleaned_data.get('idealNum')
+            group.activities.set(form.cleaned_data.get('activities'))
+            group.profilePic = form.cleaned_data.get('profilePic')
+            group.save()
+            return redirect('/groups/' + group.title)
+    else:
+        form = CreateGroupForm()
+    
+    return render(request, 'create_group.html', {'form' : form})
+
 class GroupListView(generic.ListView):
     model = Group
     context_object_name = 'group_list'

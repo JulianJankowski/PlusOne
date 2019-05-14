@@ -11,6 +11,9 @@
     <li><strong>Accounts:</strong> {{ Accounts }}</li>
     <li><strong>Groups:</strong> {{ Groups }}</li>
   </ul>
+  <form action="{% url 'create_group'%}">
+    <button type="submit">Create Group</button>
+  </form>
   {% else %}
   {% endif %}
 {% endblock %}

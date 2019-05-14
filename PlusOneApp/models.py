@@ -6,7 +6,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 
 class Account(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, unique=True)
     DOB = models.DateField(auto_now=False, auto_now_add=False, null=True)
     profilePic = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None, blank=True, default="static/images/default_profile_icon.jpg")
     emailConfirmed = models.BooleanField(default=False)
@@ -19,7 +19,7 @@ class Account(models.Model):
     getUsername.short_description = "User"
 
     def get_absolute_url(self):
-        return reverse('account-detail', args=[str(self.id)])
+        return reverse('account-detail', args=[str(self.getUsername())])
 
 @receiver(post_save, sender=User)
 def update_user_account(sender, instance, created, **kwargs):
@@ -79,7 +79,7 @@ class Group(models.Model):
         return reverse('group-profile', args=[str(self.title)])
 
 class Event(models.Model):
-    title = models.CharField(max_length=50)
+    name = models.CharField(max_length=50)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     description = models.TextField()
     

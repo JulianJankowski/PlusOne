@@ -15,4 +15,4 @@ class GroupAdmin(admin.ModelAdmin):
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ('title', 'group', 'timeCreated', 'timeOccuring', 'reccuring', 'howOften', 'location', 'displayActivities')
+    list_display = ('name', 'group', 'timeCreated', 'timeOccuring', 'reccuring', 'howOften', 'location', 'displayActivities')
