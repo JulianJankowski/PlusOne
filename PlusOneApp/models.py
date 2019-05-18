@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db.models.signals import post_save
+from PlusOneApp.choices import *
 
 class Account(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, unique=True)
@@ -88,21 +89,11 @@ class Event(models.Model):
     
     reccuring = models.BooleanField(default=False) 
     
-    RECCHOICES = (
-        ("D", "Daily"),
-        ("BW", "Bi-Weekly"),
-        ("W", "Weekly"),
-        ("F", "Fortnightly"),
-        ("M", "Monthly"),
-        ("Q", "Quaterly"),
-        ("BY", "Bi-Yearly"),
-        ("Y", "Yearly"),
-    )
-    howOften = models.CharField(max_length=11, choices=RECCHOICES, blank=True, null=True)
+    howOften = models.CharField(max_length=11, choices=RECCURING_CHOICES, blank=True, null=True)
 
     location = models.CharField(max_length=500, null=True)
 
-    activities = models.ManyToManyField(Activity, help_text='Select the activities for this group')
+    activities = models.ManyToManyField(Activity, help_text='Select the activities for this event')
     def displayActivities(self):
         return ', '.join(act.name for act in self.activities.all()[:3])
     displayActivities.short_description = 'Activites'

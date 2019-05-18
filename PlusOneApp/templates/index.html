@@ -14,6 +14,9 @@
   <form action="{% url 'create_group'%}">
     <button type="submit">Create Group</button>
   </form>
+  <form action="{% url 'create_event' %}">
+    <button type="submit">Create Event</button>
+  </form>
   {% else %}
   {% endif %}
 {% endblock %}

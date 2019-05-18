@@ -13,4 +13,5 @@ urlpatterns = [
     path('user/<str:pk>', views.UserProfile.as_view(), name="account-profile"),
     path('register/', views.register, name="register"),
     path('create_group/', views.create_group, name="create_group"),
+    path('create_event/', views.create_event, name="create_event")
 ]

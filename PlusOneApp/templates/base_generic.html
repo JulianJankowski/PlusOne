@@ -17,6 +17,7 @@
         <ul class="sidebar-nav">
           {% if user.is_authenticated %}
             <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'account-profile' request.user.id %}">My Profile</a></li>
             <li><a href="{% url 'activities' %}">All Activites</a></li>
             <li><a href="{% url 'groups' %}">All Groups</a></li>
             <li>User: {{ user.get_username }}</li>

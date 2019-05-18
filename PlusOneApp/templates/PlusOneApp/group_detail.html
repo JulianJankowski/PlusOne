@@ -3,4 +3,12 @@
 {% block content %}
     <h1> {{ group.title }} </h1>
     <p> {{ group.description }}</p>
+    <h2>Members:</h2>
+    {% for member in group.members.all %}
+        <li>{{ member }}</li>
+    {% endfor %}
+    <h2>Events</h2>
+    {% for event in group.events.all %}
+        <li>{{ event }}</li>
+    {% endfor %}
 {% endblock %}

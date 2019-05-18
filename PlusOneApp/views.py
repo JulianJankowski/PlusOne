@@ -29,7 +29,6 @@ def register(request):
     
     else:
         form = RegistrationForm()
-    
     return render(request, 'register.html', {'form': form})
 
 def create_group(request):
@@ -50,8 +49,17 @@ def create_group(request):
             return redirect('/groups/' + group.title)
     else:
         form = CreateGroupForm()
-    
     return render(request, 'create_group.html', {'form' : form})
+
+def create_event(request):
+    if(request.user.is_authenticated == False):
+        return redirect("index")
+    if(request.method == "POST"):
+        form = CreateEventForm(request.POST, user=request.user)
+    
+    else:
+        form = CreateEventForm(user=request.user)
+    return render(request, 'create_event.html', {'form' : form})
 
 class GroupListView(generic.ListView):
     model = Group
