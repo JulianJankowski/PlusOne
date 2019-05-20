@@ -22,7 +22,6 @@ class RegistrationForm(UserCreationForm):
 
 class CreateGroupForm(forms.ModelForm):
     title = forms.CharField()
-    members = forms.ModelMultipleChoiceField(queryset=Account.objects.all(), required=False)
     description = forms.CharField()
     idealNum = forms.IntegerField()
     activities = forms.ModelMultipleChoiceField(queryset=Activity.objects.all(), required=False)
@@ -30,13 +29,13 @@ class CreateGroupForm(forms.ModelForm):
 
     class Meta:
         model = Group
-        fields = ('title', 'members', 'description', 'idealNum', 'activities', 'profilePic')
+        fields = ('title', 'description', 'idealNum', 'activities', 'profilePic')
 
 class CreateEventForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user',None)
         super(CreateEventForm, self).__init__(*args, **kwargs)
-        self.fields['group'].queryset = self.user.account.group_set.all()
+        self.fields['group'].queryset = self.user.account.membership_set.filter(models.Q(status="A") | models.Q(status="O"))
 
     name = forms.CharField()
     group = forms.ModelChoiceField(queryset=None, required=True)

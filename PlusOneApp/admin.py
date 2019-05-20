@@ -11,8 +11,12 @@ class ActivityAdmin(admin.ModelAdmin):
 
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
-    list_display = ('title', 'displayMembers', 'curMembers', 'idealCount', 'displayActivities', 'description')
+    list_display = ('title', 'curMembers', 'idealCount', 'displayActivities', 'description')
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     list_display = ('name', 'group', 'timeCreated', 'timeOccuring', 'reccuring', 'howOften', 'location', 'displayActivities')
+
+@admin.register(Membership)
+class MembershipAdmin(admin.ModelAdmin):
+    list_display = ('member', 'group', 'status')

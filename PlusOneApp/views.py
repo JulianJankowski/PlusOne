@@ -40,12 +40,18 @@ def create_group(request):
             group = form.save()
             group.refresh_from_db()
             group.title = form.cleaned_data.get('title')
-            group.members.set(form.cleaned_data.get('members'))
             group.description = form.cleaned_data.get('description')
             group.idealNum = form.cleaned_data.get('idealNum')
             group.activities.set(form.cleaned_data.get('activities'))
             group.profilePic = form.cleaned_data.get('profilePic')
             group.save()
+
+            membership = Membership()
+            membership.member = request.user.account
+            membership.group = group
+            membership.status = "O"
+            membership.save()
+
             return redirect('/groups/' + group.title)
     else:
         form = CreateGroupForm()

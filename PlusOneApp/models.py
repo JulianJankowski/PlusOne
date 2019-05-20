@@ -49,17 +49,17 @@ class Group(models.Model):
     title = models.CharField(max_length=200, primary_key=True)
 
     #Members
-    members = models.ManyToManyField(Account, help_text='Select members of this group')
-    def displayMembers(self):
-        return ', '.join(member.getUsername() for member in self.members.all()[:3])
-    displayMembers.short_description = 'Members'
+    #members = models.ManyToManyField(Account, help_text='Select members of this group')
+    #def displayMembers(self):
+    #    return ', '.join(member.getUsername() for member in self.members.all()[:3])
+    #displayMembers.short_description = 'Members'
 
     #Description
     description = models.TextField(help_text='Enter a description of for group')
     
     #Current Count
     def curMembers(self):
-        return self.members.all().count()
+        return self.membership_set.all().count()
     curMembers.short_description = "Number of members"
 
     #Ideal Count
@@ -78,6 +78,14 @@ class Group(models.Model):
 
     def get_absolute_url(self):
         return reverse('group-profile', args=[str(self.title)])
+
+class Membership(models.Model):
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    member = models.ForeignKey(Account, on_delete=models.CASCADE)
+    status = models.CharField(max_length=6, choices=MEMBER_CHOICES, blank=True, null=True)
+
+    def __str__(self):
+        return self.group.title
 
 class Event(models.Model):
     name = models.CharField(max_length=50)
