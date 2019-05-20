@@ -48,12 +48,6 @@ class Group(models.Model):
     #Title
     title = models.CharField(max_length=200, primary_key=True)
 
-    #Members
-    #members = models.ManyToManyField(Account, help_text='Select members of this group')
-    #def displayMembers(self):
-    #    return ', '.join(member.getUsername() for member in self.members.all()[:3])
-    #displayMembers.short_description = 'Members'
-
     #Description
     description = models.TextField(help_text='Enter a description of for group')
     
@@ -111,3 +105,21 @@ class Event(models.Model):
 
     def get_absolute_url(self):
         return reverse('event-detail', args=[str(self.id)])
+
+class Post(models.Model):
+    content = models.TextField()
+    author = models.ForeignKey(Account, on_delete=models.CASCADE)
+    timePosted = models.DateTimeField(auto_now_add=True)
+
+class EventPost(Post):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+
+class GroupPost(Post):
+    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+
+class PostImage(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    image = models.ImageField()
+    description = models.TextField(null=True)
+    timeUploaded = models.DateTimeField(auto_now_add=True)
+    location = models.CharField(max_length=500)
