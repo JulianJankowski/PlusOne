@@ -62,7 +62,18 @@ def create_event(request):
         return redirect("index")
     if(request.method == "POST"):
         form = CreateEventForm(request.POST, user=request.user)
-    
+        if(form.is_valid()):
+            event = form.save()
+            event.refresh_from_db()
+            event.name = form.cleaned_data.get('name')
+            groupMembership = form.cleaned_data.get('groupMembership')
+            event.group = groupMembership.group
+            #event.timeOccuring = form.cleaned_data.get('reccuring')
+            event.howOften = form.cleaned_data.get('howOften')
+            event.activities.set(form.cleaned_data.get('activities'))
+            event.save()
+
+            return redirect("/groups/" + event.group.title)
     else:
         form = CreateEventForm(user=request.user)
     return render(request, 'create_event.html', {'form' : form})
@@ -75,6 +86,31 @@ class GroupListView(generic.ListView):
 
 class GroupProfile(generic.DetailView):
     model = Group
+
+    def get_context_data(self, **kwargs):
+        context = super(GroupProfile, self).get_context_data(**kwargs)
+        context['form'] = CreatePostForm
+        return context
+
+    def post(self, request, *args, **kwargs):
+        #print(request.path.split('/'))
+        form = CreatePostForm(request.POST)
+        if(form.is_valid()):
+            post = form.save()
+            post.refresh_from_db()
+            post.content = form.cleaned_data.get('content')
+            post.author = request.user.account
+            post.group = Group.objects.filter(title=request.path.split('/')[2]).first()
+            post.save()
+            self.object = self.get_object()
+            context = context = super(GroupProfile, self).get_context_data(**kwargs)
+            context['form'] = CreatePostForm
+            return redirect(request.path)
+        else:
+            self.object = self.get_object()
+            context = super(GroupProfile, self).get_context_data(**kwargs)
+            context['form'] = CreatePostForm
+            return self.render_to_response(request.url, context=context)
 
 class ActivityListView(generic.ListView):
     model = Activity

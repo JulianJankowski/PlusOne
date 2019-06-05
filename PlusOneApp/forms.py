@@ -35,12 +35,12 @@ class CreateEventForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user',None)
         super(CreateEventForm, self).__init__(*args, **kwargs)
-        self.fields['group'].queryset = self.user.account.membership_set.filter(models.Q(status="A") | models.Q(status="O"))
+        self.fields['groupMembership'].queryset = self.user.account.membership_set.filter(models.Q(status="A") | models.Q(status="O"))
 
     name = forms.CharField()
-    group = forms.ModelChoiceField(queryset=None, required=True)
+    groupMembership = forms.ModelChoiceField(queryset=None, required=True)
     description = forms.CharField(widget=forms.Textarea)
-    timeOccuring = forms.DateTimeField(label="Time Occuring", input_formats=['%d/%m/%Y %H:%M'])
+    #timeOccuring = forms.DateTimeField(label="Time Occuring", input_formats=['%d/%m/%Y %H:%M'])
     reccuring = forms.BooleanField()
     howOften = forms.ChoiceField(choices=RECCURING_CHOICES, label="How Often")
 
@@ -48,4 +48,12 @@ class CreateEventForm(forms.ModelForm):
 
     class Meta:
         model = Event
-        fields = ('name', 'group', 'description', 'timeOccuring', 'reccuring', 'howOften', 'activities')
+        fields = ('name', 'groupMembership', 'description', 'timeOccuring', 'reccuring', 'howOften', 'activities')
+
+class CreatePostForm(forms.ModelForm):
+    content = forms.CharField(widget=forms.Textarea)
+
+    class Meta:
+        model = Post
+        fields = ('content',)
+    

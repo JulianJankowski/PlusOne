@@ -82,8 +82,9 @@ class Membership(models.Model):
         return self.group.title
 
 class Event(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, null=True)
     description = models.TextField()
     
     timeCreated = models.DateTimeField(auto_now_add=True, null=True)
@@ -107,15 +108,14 @@ class Event(models.Model):
         return reverse('event-detail', args=[str(self.id)])
 
 class Post(models.Model):
+    id = models.AutoField(primary_key=True)
     content = models.TextField()
-    author = models.ForeignKey(Account, on_delete=models.CASCADE)
+    author = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
     timePosted = models.DateTimeField(auto_now_add=True)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, null=True)
 
-class EventPost(Post):
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
-
-class GroupPost(Post):
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.content
 
 class PostImage(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
